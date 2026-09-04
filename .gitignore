@@ -1,0 +1,43 @@
+# ===== weights / checkpoints (Drive에 보관) =====
+*.pth
+*.ckpt
+*.pt
+*.safetensors
+weights/
+checkpoints/
+
+# ===== data / outputs (대용량) =====
+runs/
+results/
+data/
+*.tif
+*.tiff
+*.zip
+*.npy
+*.npz
+
+# ===== images (샘플 소수만 별도 커밋) =====
+*.png
+*.jpg
+*.jpeg
+*.gif
+!docs/**/*.png
+
+# ===== notebook 체크포인트 / 백업 =====
+.ipynb_checkpoints/
+*.ipynb.bak
+*.bak
+
+# ===== python =====
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# ===== logs / temp =====
+*.log
+.DS_Store
+Thumbs.db

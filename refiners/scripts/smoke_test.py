@@ -13,7 +13,7 @@ import torch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-sys.path.insert(0, os.path.join(ROOT, "team_aiduo"))
+sys.path.insert(0, os.path.join(ROOT, "pipeline"))
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"[smoke] device={device}, torch={torch.__version__}")

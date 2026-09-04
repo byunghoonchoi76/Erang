@@ -15,7 +15,7 @@ import torch.nn.functional as F
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-sys.path.insert(0, os.path.join(ROOT, "team_aiduo"))
+sys.path.insert(0, os.path.join(ROOT, "pipeline"))
 from src.arch_rrdb_a2v5b import RRDBNetA2V5B  # noqa: E402
 from cycleGen_model import load_cyclegan_model  # noqa: E402
 

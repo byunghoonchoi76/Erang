@@ -22,7 +22,7 @@ ROOT = os.path.expanduser("~/erang_sr")
 CUT  = os.path.join(ROOT, "refiners/cut_src")
 os.chdir(CUT)
 sys.path.insert(0, CUT)                          # CUT 최우선 (import models/data 충돌 방지)
-for p in (ROOT, os.path.join(ROOT,"team_aiduo")):
+for p in (ROOT, os.path.join(ROOT,"pipeline")):
     if p not in sys.path: sys.path.append(p)
 DEV = "cuda"
 def load01(p):

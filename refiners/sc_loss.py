@@ -42,7 +42,7 @@ class _DINOv3Features(nn.Module):
 
     def __init__(self, dinov3_model, img_size=224):
         super().__init__()
-        # team_aiduo DINOv3ResolutionClassifier.model = timm ViT
+        # pipeline DINOv3ResolutionClassifier.model = timm ViT
         self.backbone = dinov3_model.model
         self.img_size = img_size
         self.register_buffer("mean", torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))

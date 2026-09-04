@@ -21,7 +21,7 @@ import torch
 ROOT = os.path.expanduser("~/erang_sr")
 CUT  = os.path.join(ROOT, "refiners/cut_src")
 os.chdir(CUT)
-for p in (CUT, ROOT, os.path.join(ROOT,"team_aiduo")):
+for p in (CUT, ROOT, os.path.join(ROOT,"pipeline")):
     if p not in sys.path: sys.path.insert(0, p)
 DEV = "cuda"
 def load01(p):

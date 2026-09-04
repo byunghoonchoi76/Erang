@@ -1,7 +1,7 @@
 """동결(frozen) 업스트림 래퍼.
 
 기업 인계 파이프라인 `DINOv3 -> RRDB -> HAT -> CycleGAN`을 이 프로젝트에서
-'수정 없이 고정'해 쓰기 위한 로더. team_aiduo 레포 코드를 import 하되,
+'수정 없이 고정'해 쓰기 위한 로더. pipeline 레포 코드를 import 하되,
 가중치가 미수령인 모듈(HAT, DINOv3)은 None으로 안전하게 처리한다.
 
 무거운 의존성(basicsr 등)은 지연 import — 가중치 없는 smoke test가 깨지지 않도록.
@@ -13,9 +13,9 @@ import torch
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.dirname(_HERE)
-_TEAM_AIDUO = os.path.join(_ROOT, "team_aiduo")
-if _TEAM_AIDUO not in sys.path:
-    sys.path.insert(0, _TEAM_AIDUO)
+_PIPELINE = os.path.join(_ROOT, "pipeline")
+if _PIPELINE not in sys.path:
+    sys.path.insert(0, _PIPELINE)
 
 
 def _resolve(path):
@@ -46,7 +46,7 @@ def load_rrdb(weight_path, device="cuda"):
 # CycleGAN Refiner (baseline / 대조군). 🟢 가중치 확보
 # --------------------------------------------------------------------------
 def load_cyclegan(weight_path, device="cuda"):
-    from cycleGen_model import load_cyclegan_model  # team_aiduo
+    from cycleGen_model import load_cyclegan_model  # pipeline
 
     return load_cyclegan_model(_resolve(weight_path), device=device)
 
@@ -88,7 +88,7 @@ def load_dinov3(weight_path, device="cuda", model_name="vit_large_patch16_dinov3
     if not wp or not os.path.exists(wp):
         print(f"[DINOv3] WARN weight missing -> None (SC Loss 가이드 대기): {wp}")
         return None
-    from dinov3_model import load_dinov3_model  # team_aiduo
+    from dinov3_model import load_dinov3_model  # pipeline
 
     return load_dinov3_model(wp, model_name=model_name, device=device)
 

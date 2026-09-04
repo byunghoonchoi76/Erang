@@ -32,7 +32,7 @@ class CUTSCModel(CUTModel):
             from src.sc_loss import StructuralConsistencyLoss
             dino = None
             if opt.sc_backend == "dinov3":
-                # DINOv3 백본 직접 로드 (team_aiduo 미의존, sys.path 오염 방지)
+                # DINOv3 백본 직접 로드 (pipeline 미의존, sys.path 오염 방지)
                 import timm, yaml, torch
                 cfg = yaml.safe_load(open(os.path.join(ROOT, "configs/paths.yaml"), encoding="utf-8"))
                 wp = os.path.join(ROOT, cfg["weights"]["dinov3"])

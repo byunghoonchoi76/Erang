@@ -27,7 +27,7 @@ import torch
 
 ROOT = os.path.expanduser("~/erang_sr")
 os.chdir(ROOT)
-for p in (ROOT, os.path.join(ROOT, "team_aiduo")):
+for p in (ROOT, os.path.join(ROOT, "pipeline")):
     if p not in sys.path:
         sys.path.insert(0, p)
 

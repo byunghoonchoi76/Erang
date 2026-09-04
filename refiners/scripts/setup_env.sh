@@ -28,7 +28,7 @@ pip install pytorch-fid            # FID
 
 # 5) HAT/basicsr (가중치 도착 후 필요) — 빌드 실패 시 아래 우회 고려
 # pip install basicsr==1.4.2
-#   실패 시: team_aiduo/archs/hat_arch.py 가 basicsr.utils.registry 만 요구하므로
+#   실패 시: pipeline/archs/hat_arch.py 가 basicsr.utils.registry 만 요구하므로
 #   해당 유틸만 stub 처리하거나, basicsr 최신(호환) 버전 시도.
 
 echo "[setup] conda env '$ENV' 준비 완료. 다음: python scripts/smoke_test.py"

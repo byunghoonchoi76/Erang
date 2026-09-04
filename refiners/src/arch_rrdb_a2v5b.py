@@ -1,6 +1,6 @@
 """RRDBNet A2V5B — 기업 통합 노트북의 인라인 정의를 그대로 이식.
 
-실사 근거: teamaiduo/team_aiduo `AiDuo&Erang_Integrated_Pipeline.ipynb` cell 16
+실사 근거: 내부 `통합 파이프라인.ipynb` cell 16
 (`%%writefile .../rrdb_model_vr2.py`). 레포 루트의 `rrdb_model.py`(48ch·23블록·x4)와
 아키텍처가 다르며, 최종 가중치 `A2_v5b_rrdbnet_best.pth`에 맞는 것은 이 8블록·64ch·
 no-upscale 정의다(기업 문의 11번 항목).

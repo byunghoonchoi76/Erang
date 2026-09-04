@@ -1,7 +1,7 @@
-# 이랑 SR Refiner — 위성 초해상화 후처리 리파이너 벤치마크
+# Erang — 위성 초해상화 파이프라인 & 후처리 리파이너 벤치마크
 
-위성영상 초해상화 파이프라인의 **후처리 리파이너**(CUT / CycleGAN / UNSB / BBDM)를 동일 조건에서 비교하고,
-실제 위성 도메인에 적용해 배포 운영점을 도출한 프로젝트입니다.
+위성영상 초해상화(SR) 파이프라인과, 마지막 단계인 **후처리 리파이너**(CUT / CycleGAN / UNSB / BBDM)를
+동일 조건에서 비교하고 실제 위성 도메인에 적용해 배포 운영점을 도출한 프로젝트입니다.
 
 파이프라인: **DINOv3(라우팅) → RRDBNet(1차 SR) → HAT(2차 정밀 SR, ×4) → Refiner(후처리)**
 
@@ -10,19 +10,25 @@
 
 ---
 
-## 리포지토리 구조 (GitHub에 올리는 것)
+## 리포지토리 구조
 
 ```
-code/
-  src/              # 아키텍처·데이터·지표·평가 (arch_rrdb, data_bridge, metrics, eval_report, ...)
-  configs/          # paths.yaml 등 경로/설정
-  scripts/          # 학습·평가·노트북 생성 스크립트 (run_cut_*.sh, eval_*.py, make_*_notebook.py)
-notebooks/          # 실험·평가 노트북 (cut_*, eval_*)
+pipeline/            # 상위 백본 (팀 공통)
+  dinov3_model.py      # DINOv3 라우터 (5-class)
+  rrdb_model_vr2.py    # RRDBNet (1차 SR)
+  hat/                 # HAT 아키텍처·데이터·모델·학습 (2차 정밀 SR)
+refiners/            # 후처리 리파이너 코드 (CUT/CycleGAN/UNSB/BBDM glue·평가)
+  src/                 # arch_rrdb, data_bridge, metrics, eval_report, upstream, ...
+  configs/paths.yaml   # 경로/설정 템플릿 (각자 환경에 맞게 채움)
+  scripts/             # 학습·평가·재현·노트북 생성 스크립트
+notebooks/           # 실험·평가 노트북 (출력 제거, 경량)
+data/                # sr_models_summary.csv (모델 요약표)
 README.md
 .gitignore
 ```
 
-**GitHub에는 코드·설정·노트북만 올립니다.** 가중치·데이터·평가 산출물은 용량이 커서(합계 ~50GB) git에 넣지 않고 아래 경로에서 받습니다.
+**GitHub에는 코드·설정·노트북만 올립니다.** 가중치·데이터·평가 산출물은 용량이 커서(합계 ~50 GB)
+git에 넣지 않고 아래 Google Drive 경로에서 받습니다.
 
 ---
 
@@ -30,67 +36,55 @@ README.md
 
 Drive 폴더: `이랑 프로젝트 / 이랑_SR_Refiner_코드공유_20260728`
 
-| 자산 | 파일 | 크기 | 위치 | 놓는 곳 |
+| 자산 | 파일 | 크기 | 위치 | 용도 |
 |---|---|---|---|---|
-| RRDB (1차 SR) | `A2_v5b_rrdbnet_best.pth` | 22 MB | Drive `weights/` | 추론 코드의 RRDB 가중치 경로 |
+| RRDB (1차 SR) | `A2_v5b_rrdbnet_best.pth` | 22 MB | Drive `weights/` | RRDBNet 가중치 |
 | DINOv3 라우터 | `classified_DINOv3-Large_best.pth` | 1.16 GB | Drive `weights/` | 라우팅 단계 |
-| CUT 리파이너 | `final_net_G.pth` | 44 MB | Drive `weights/` 또는 서버 `refiners/cut_src/checkpoints/bench_cut_3348/` | CUT 추론 |
-| CUT 변형 | `best_G_AB.pth`, `latest_net_G(no-sc).pth`, `latest_net_G(vgg-sc).pth` | 각 43 MB | Drive `weights/` | SC-loss 실험용 |
-| 4모델 출력 샘플 | `share_4model/` | — | Drive | 정성 비교용 (input/CUT/CycleGAN/UNSB/BBDM/GT) |
+| CUT 리파이너 | `final_net_G.pth` | 44 MB | Drive `weights/` | CUT 추론 |
+| CUT 변형 | `best_G_AB.pth`, `latest_net_G(no-sc).pth`, `latest_net_G(vgg-sc).pth` | 각 43 MB | Drive `weights/` | SC-loss 실험 |
+| 4모델 출력 샘플 | `share_4model/` | — | Drive | 정성 비교 (input/CUT/CycleGAN/UNSB/BBDM/GT) |
 
-> `paths.yaml`(0 byte 템플릿)에 각자 환경의 가중치·데이터 경로를 채워 쓰면 됩니다.
+> `refiners/configs/paths.yaml`에 각자 환경의 가중치·데이터 경로를 채워 씁니다.
+> HAT(2m→0.5m) 가중치 등 일부는 기업 공유 자산으로, 미제공 환경에서는 해당 경로를 비워 두면 됩니다.
 
 ---
 
-## UNSB · BBDM (대용량 — Git 제외, 별도 보관)
+## UNSB · BBDM 프레임워크 (대용량 — Git 제외, 별도 보관)
 
-두 프레임워크는 **체크포인트 + 잠재공간(VQGAN) 가중치**가 커서 git에 올리지 않습니다.
-아래 표대로 원 저장소를 clone한 뒤, 체크포인트만 지정 위치에 놓으면 재현됩니다.
+`refiners/`에는 리파이너 **glue·평가 코드**가 있고, UNSB/BBDM의 **원 프레임워크와 체크포인트**는
+용량(잠재공간·VQGAN 포함)이 커서 git에 올리지 않습니다. 아래대로 원 저장소를 clone하고 체크포인트만 배치하면 재현됩니다.
 
 ### UNSB (Unpaired Neural Schrödinger Bridge) — 약 0.5 GB
 - 프레임워크: `cyclomon/UNSB` fork (CUT 코드베이스 기반)
-- 사용 체크포인트(추론): `checkpoints/bench_unsb_3348/final_net_G.pth`
-  - 학습 시 함께 저장: `final_net_{D,E,F}.pth`, `latest_net_{G,D,E,F}.pth` (추론엔 `final_net_G.pth`만 필요)
-- 놓는 곳: `<UNSB>/checkpoints/bench_unsb_3348/`
+- 추론 체크포인트: `checkpoints/bench_unsb_3348/final_net_G.pth` (약 45 MB)
+  - 학습 산출물(추론 불필요): `final_net_{D,E,F}.pth`, `latest_net_{G,D,E,F}.pth`
 
 ```
-UNSB/
-  checkpoints/
-    bench_unsb_3348/
-      final_net_G.pth        ← 추론에 필요 (약 45 MB)
-      final_net_D.pth  final_net_E.pth  final_net_F.pth   (학습 산출물)
-      latest_net_*.pth                                    (중간 저장)
+UNSB/checkpoints/bench_unsb_3348/
+  final_net_G.pth        ← 추론에 필요
+  final_net_{D,E,F}.pth  latest_net_*.pth   (학습 산출물)
 ```
 
 ### BBDM (Brownian Bridge Diffusion Model) — 약 36 GB (전체), 필수 약 4 GB
 - 프레임워크: `xuekt98/BBDM` fork (Latent BBDM, f4)
 - 설정: `configs/lbbdm_3348_f4.yaml`
-- 사용 체크포인트(추론):
+- 추론 체크포인트:
   - LBBDM: `results/lbbdm_3348/LBBDM-f4/checkpoint/top_model_epoch_10.pth` (약 2 GB)
   - VQGAN(잠재공간): `results/VQGAN/model.ckpt`
-- 놓는 곳: 아래 구조 그대로
 
 ```
 BBDM/
   configs/lbbdm_3348_f4.yaml
   results/
-    VQGAN/model.ckpt                                         ← 잠재공간 (필수)
+    VQGAN/model.ckpt                                    ← 잠재공간 (필수)
     lbbdm_3348/LBBDM-f4/checkpoint/
-      top_model_epoch_10.pth                                 ← 추론에 필요 (약 2 GB)
+      top_model_epoch_10.pth                            ← 추론에 필요 (약 2 GB)
       config.yaml
       (top/latest/last_optim_sche*.pth 는 학습 재개용 — 추론 불필요, 각 약 2 GB)
 ```
 
-> BBDM은 `top_optim_sche_*`, `latest_model_*`, `last_*` 등 옵티마이저·중간 스냅샷이 대부분(개당 2 GB)이라 전체가 36 GB입니다.
+> BBDM은 옵티마이저·중간 스냅샷(개당 2 GB)이 대부분이라 전체 36 GB입니다.
 > **재현에는 `VQGAN/model.ckpt` + `top_model_epoch_10.pth` + `lbbdm_3348_f4.yaml` 3개면 충분**합니다.
-
----
-
-## 환경 · 실행
-
-- 환경: `bbdm_src/environment.yml`(BBDM), CUT/UNSB는 CUT 계열 의존성(PyTorch, dominate, visdom 등)
-- 평가: `code/scripts/eval_*.py`, `code/src/eval_report.py` (PSNR/SSIM/LPIPS/FID/NIQE + 보라% 프록시)
-- 노트북: `notebooks/`의 `cut_*_experiment.ipynb`, `eval_*.ipynb`
 
 ---
 
@@ -108,6 +102,12 @@ BBDM/
 실 도메인(실제 0.5 m GT 30장): SR 단독 대비 `+CUT+blend(α=0.125)`에서 LPIPS 0.077→0.035(55%↓).
 
 ---
+
+## 환경 · 실행
+
+- 환경: `pipeline/hat/requirements.txt`(HAT), BBDM은 원 저장소 `environment.yml`, CUT/UNSB는 CUT 계열 의존성
+- 평가: `refiners/scripts/eval_*.py`, `refiners/src/eval_report.py` (PSNR/SSIM/LPIPS/FID/NIQE + 보라% 프록시)
+- 노트북: `notebooks/`의 `cut_*_experiment.ipynb`, `eval_*.ipynb`
 
 ## 참고
 - 상세 실험 기록·정성 이미지: Drive `이랑_SR_Refiner_코드공유_20260728/최종실험/`, `runs/`

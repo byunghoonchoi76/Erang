@@ -1,0 +1,29 @@
+# === Super Resolution 모델 실행 필수 라이브러리 ===
+
+
+basicsr==1.4.2
+thop
+einops
+matplotlib
+tensorboardX
+numpy==1.26.4
+pandas  # basicsr에서도 사용될 수 있으며, geopandas의 핵심 의존성
+
+# === 이미지 처리 및 유틸리티 라이브러리 ===
+
+Pillow   # 기본적인 이미지 처리 (PNG 등)
+tqdm     # 진행률 표시 바
+click    # basicsr 등에서 사용될 수 있는 CLI 라이브러리
+attrs    # basicsr 등에서 사용될 수 있는 라이브러리
+
+# === 지리공간 데이터 처리 (TIF/ECW 클리핑 등) ===
+
+rasterio   # GeoTIFF, ECW 등 래스터 데이터 처리
+geopandas  # SHP 파일 등 벡터 데이터 처리
+shapely    # geopandas에서 사용하는 기하학 객체 라이브러리
+pytz       # pandas의 시간대 처리 의존성 (ImportError 해결)
+
+# === 모델 다운로드 유틸리티 ===
+
+gdown
+huggingface_hub

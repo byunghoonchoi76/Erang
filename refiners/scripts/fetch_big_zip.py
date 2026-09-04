@@ -1,6 +1,6 @@
 import re, requests, os, time
 FID = "1HgT1GBRh8bNwomNuaL_lmM60Tan03AfK"
-OUT = os.path.expanduser("~/geoit_sr_refiner/data/goit_supperres_data.zip")
+OUT = os.path.expanduser("~/erang_sr/data/sr_data_full.zip")
 s = requests.Session()
 r = s.get("https://drive.google.com/uc?export=download", params={"id": FID}, stream=True)
 if "text/html" in r.headers.get("Content-Type", ""):

@@ -19,7 +19,7 @@ class RefinerAdapter:
 
 ## 이식 계획 (submodule)
 ```bash
-cd ~/geoit_sr_refiner/refiners
+cd ~/erang_sr/refiners
 git submodule add https://github.com/taesungp/contrastive-unpaired-translation cut_src      # 팀원 A
 git submodule add https://github.com/xuekt98/BBDM bbdm_src                                   # 팀원 B
 git submodule add https://github.com/cyclomon/UNSB unsb_src                                  # 팀장

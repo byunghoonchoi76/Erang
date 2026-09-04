@@ -1,7 +1,7 @@
 # 자산 다운로드 가이드 (Google Drive → 서버)
 
 노션 "기업 제공 데이터 인덱스(2026-07-23)"의 Drive 링크 기준. `gdown` 사용.
-`conda activate geosr && pip install gdown` 후 `~/geoit_sr_refiner`에서 실행.
+`conda activate geosr && pip install gdown` 후 `~/erang_sr`에서 실행.
 
 ## 🟢 확보 가중치 (즉시 다운로드)
 ```bash
@@ -30,10 +30,10 @@ gdown 1bH41QAb85JUh5JpHePD9bv7-8qVRNUNo -O weights/SRtoHR_CycleGen_설명자료.
 ```
 
 ## 🔴 미수령 (기업 공유 대기 — 받는 즉시 배치)
-- `net_g_270000.pth` (HAT 가중치) → `weights/net_g_270000.pth`  **← 1주차 임계경로**
+- `HAT_WEIGHTS.pth` (HAT 가중치) → `weights/HAT_WEIGHTS.pth`  **← 1주차 임계경로**
 - `classified_DINOv3-Large/best_checkpoint.pth` → `weights/classified_DINOv3-Large_best.pth`
-- 0.5m GT / 2m·0.5m 페어 10,200쌍 → `data/paired_10200/{hr,lr}`
-- (선택) `goit_supperres_data.zip` 13GB 내부 PNG 전처리본 — SR_Output 페어 소재 확인
+- 0.5m GT / 2m·0.5m 페어 10,200쌍 → `data/PAIRED_DATA/{hr,lr}`
+- (선택) `sr_data_full.zip` 13GB 내부 PNG 전처리본 — SR_Output 페어 소재 확인
 
 ## 다운로드 후
 ```bash

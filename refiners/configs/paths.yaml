@@ -1,16 +1,17 @@
 # 중앙 자산 경로 설정 — 가중치/데이터가 도착하면 여기만 수정하면 됨
-# 서버: MS-C931, base = ~/geoit_sr_refiner
+# base = <PROJECT_ROOT> (각자 환경에 맞게 지정)
+# 표기: <...> 는 채워야 하는 자리. 🔴 표시는 사내 제공 자산(별도 수령).
 
-project_root: ~/geoit_sr_refiner
+project_root: <PROJECT_ROOT>          # 예: ~/erang_sr
 device: cuda
 
 weights:
   # 🟢 확보 (Drive에서 fetch_assets.md 참고해 내려받아 여기에 배치)
   rrdb_a2v5b: weights/A2_v5b_rrdbnet_best.pth        # RRDBNet A2V5B (3m->2m)
   cyclegan_g_ab: weights/best_G_AB.pth               # CycleGAN Refiner (baseline)
-  # 🔴 미수령 (기업 공유 대기) — 도착 전에는 None 처리
-  hat: weights/net_g_270000.pth                      # HAT (2m->0.5m, x4) — 임계경로
   dinov3: weights/classified_DINOv3-Large_best.pth   # DINOv3 5-class 분류기
+  # 🔴 사내 제공 자산 — 미수령 시 None 처리
+  hat: weights/<HAT_WEIGHTS>.pth                     # HAT (2m->0.5m, x4) — 사내 공유
 
 # 아키텍처 스펙 (실사·코드 근거)
 arch:
@@ -22,7 +23,7 @@ arch:
     upscale: 4
     embed_dim: 180
     window_size: 16
-    key: params_ema     # net_g_270000.pth는 EMA 가중치
+    key: params_ema     # HAT 체크포인트는 EMA 가중치(params_ema) 사용
   cyclegan:
     residual_blocks: 9  # ResNet gen, InstanceNorm, Tanh
   dinov3:
@@ -34,16 +35,16 @@ arch:
 data:
   # 샘플셋 (Drive: sr_data_sample.zip 27.8MB) — 파이프 검증용
   sample_root: data/sr_data_sample
-  # 실전 페어 (10,200장) — 메일 공유 대기
-  paired_root: data/paired_10200          # {hr, lr} — 정량평가(Track1)
+  # 🔴 실전 정합 페어 — 사내 제공 자산
+  paired_root: data/<PAIRED_DATA>         # {hr, lr} — 정량평가(Track1)
   # unpaired HR 도메인 (AI Hub/국토정보) — refiner 타겟 도메인
   hr_domain_root: data/hr_domain          # Track2 target
-  # SR_Output (리파이너 입력 소스). HAT 없으면 기업 제공 sr 페어 사용
-  sr_output_root: data/sr_output
+  # SR_Output (리파이너 입력 소스) — HAT 산출물 또는 사내 제공 SR 페어
+  sr_output_root: data/<SR_OUTPUT>
   degrade: very_strong                    # Real-ESRGAN 2차 합성 열화 (추정)
 
 eval:
-  # 규약을 먼저 고정: PSNR data_range를 어디에 맞출지 (실사 §7: 36.36 vs 17.72 이슈)
+  # 규약을 먼저 고정: PSNR data_range를 어디에 맞출지 ([0,1] vs 8bit 이슈)
   psnr_data_range: 1.0     # [0,1] 텐서 기준. 8bit면 255.0
   paired_metrics: [psnr, ssim, lpips]     # Track1 (GT 존재)
   unpaired_metrics: [fid, niqe]           # Track2 (GT 없음)

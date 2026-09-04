@@ -18,7 +18,7 @@ md("""# CUT Refiner 실험 (직접 실행용)
 
 md("## 0. 환경 설정")
 code("""import os, sys, subprocess, time
-ROOT = os.path.expanduser("~/geoit_sr_refiner")
+ROOT = os.path.expanduser("~/erang_sr")
 CUT  = os.path.join(ROOT, "refiners/cut_src")
 os.chdir(CUT)                       # CUT은 상대 import라 cut_src에서 실행
 if CUT not in sys.path: sys.path.insert(0, CUT)
@@ -128,7 +128,7 @@ print("visuals keys:", list(vis.keys()))
 """)
 
 md("""## 다음
-- 13GB `goit_supperres_data.zip` 도착 → `prepare_cut_data.py`의 `--lr_dir/--hr_dir`를 실데이터로 바꿔 **본학습**(수백~수천 장, `--n_epochs` 늘려)
+- 13GB `sr_data_full.zip` 도착 → `prepare_cut_data.py`의 `--lr_dir/--hr_dir`를 실데이터로 바꿔 **본학습**(수백~수천 장, `--n_epochs` 늘려)
 - 같은 방식으로 **UNSB**(동일 프레임워크), **BBDM**(diffusion) 실험 노트북 추가
 - 학습된 refiner로 Dual-Track 평가(PSNR/SSIM/LPIPS + FID/NIQE) → 기존 CycleGAN baseline(17.23/0.534)과 대조표
 """)
@@ -137,6 +137,6 @@ nb = {"cells": cells,
       "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
                    "language_info": {"name": "python"}},
       "nbformat": 4, "nbformat_minor": 5}
-outp = os.path.expanduser("~/geoit_sr_refiner/cut_refiner_v2.ipynb")
+outp = os.path.expanduser("~/erang_sr/cut_refiner_v2.ipynb")
 json.dump(nb, open(outp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("WROTE", outp, "cells:", len(cells))

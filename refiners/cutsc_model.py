@@ -26,7 +26,7 @@ class CUTSCModel(CUTModel):
         self.loss_SC = 0.0
         if self.isTrain and opt.lambda_SC > 0.0:
             self.loss_names = self.loss_names + ['SC']
-            ROOT = os.path.expanduser("~/geoit_sr_refiner")
+            ROOT = os.path.expanduser("~/erang_sr")
             if ROOT not in sys.path:
                 sys.path.append(ROOT)
             from src.sc_loss import StructuralConsistencyLoss

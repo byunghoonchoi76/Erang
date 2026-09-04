@@ -6,7 +6,7 @@ Track2: refined 폴더 vs HR 도메인 폴더 → FID, + refined NIQE 평균
 
 사용:
   python -m src.eval_report --config configs/paths.yaml \
-      --refined runs/baseline_cyclegan --gt data/paired_10200/hr \
+      --refined runs/baseline_cyclegan --gt data/PAIRED_DATA/hr \
       --hr_domain data/hr_domain --tag baseline_cyclegan
 """
 import argparse

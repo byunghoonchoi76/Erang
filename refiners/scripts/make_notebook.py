@@ -11,12 +11,12 @@ def code(src):
     cells.append({"cell_type": "code", "execution_count": None,
                   "metadata": {}, "outputs": [], "source": src})
 
-md("""# GeoIT SR Refiner — 파이프라인 & 베이스라인
+md("""# Erang SR Refiner — 파이프라인 & 베이스라인
 
 위성영상 초해상도 파이프라인 `DINOv3 → RRDBNet → HAT → CycleGAN` 의 **동결 업스트림**을 로드하고,
 교체 대상이자 대조군인 **CycleGAN Refiner 베이스라인**을 실행·시각화·평가한다.
 
-- 서버: MS-C931 (GB10) · 프로젝트: `~/geoit_sr_refiner` · 드라이버: `src/` 모듈
+- 서버: SERVER · 프로젝트: `~/erang_sr` · 드라이버: `src/` 모듈
 - 자산 현황/블로커: **`STATUS.md`** (HAT·DINOv3 가중치, 0.5m GT 대기 중)
 - **DEMO 모드**: 실데이터/가중치가 없으면 합성 샘플로 배관만 시연(라벨 명시). 자산 도착 시 그대로 실측 전환.
 """)
@@ -25,7 +25,7 @@ md("## 0. 환경 설정")
 code("""import os, sys, json
 import torch
 
-ROOT = os.path.expanduser("~/geoit_sr_refiner")
+ROOT = os.path.expanduser("~/erang_sr")
 os.chdir(ROOT)
 for p in (ROOT, os.path.join(ROOT, "team_aiduo")):
     if p not in sys.path:
@@ -158,13 +158,13 @@ except Exception as e:
 
 print("\\n▶ 실제 대조군 평가(GT 확보 후):")
 print("  python -m src.baseline_infer --input data/sr_data_sample/test --out runs/baseline_cyclegan")
-print("  python -m src.eval_report  --refined runs/baseline_cyclegan --gt data/paired_10200/hr \\\\")
+print("  python -m src.eval_report  --refined runs/baseline_cyclegan --gt data/PAIRED_DATA/hr \\\\")
 print("      --hr_domain data/hr_domain --tag baseline_cyclegan")
 """)
 
 md("""## 7. 다음 단계
 1. **자산 다운로드** — `scripts/fetch_assets.md` (RRDB·CycleGAN 가중치, sr_data_sample)
-2. **임계경로 해소** — HAT 가중치(`net_g_270000.pth`)·0.5m GT 기업 요청 (STATUS.md §다음 액션)
+2. **임계경로 해소** — HAT 가중치(`HAT_WEIGHTS.pth`)·0.5m GT 기업 요청 (STATUS.md §다음 액션)
 3. **Refiner 교체** — `refiners/` 에 CUT/BBDM/UNSB submodule + 어댑터, 총손실에 `+ λ·L_SC(DINOv3)` 결합
 4. **대조군 표** — baseline(CycleGAN) vs 제안 3종을 동일 규약으로 Dual-Track 비교
 """)
@@ -179,7 +179,7 @@ nb = {
     "nbformat_minor": 5,
 }
 
-out = os.path.expanduser("~/geoit_sr_refiner/pipeline_baseline.ipynb")
+out = os.path.expanduser("~/erang_sr/pipeline_baseline.ipynb")
 with open(out, "w", encoding="utf-8") as f:
     json.dump(nb, f, ensure_ascii=False, indent=1)
 print("WROTE", out, "cells:", len(cells))

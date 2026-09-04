@@ -18,7 +18,7 @@ code("""import os, sys, glob
 import numpy as np
 from PIL import Image
 import torch
-ROOT = os.path.expanduser("~/geoit_sr_refiner")
+ROOT = os.path.expanduser("~/erang_sr")
 CUT  = os.path.join(ROOT, "refiners/cut_src")
 os.chdir(CUT)
 sys.path.insert(0, CUT)                          # CUT 최우선 (import models/data 충돌 방지)
@@ -129,6 +129,6 @@ md("""## 해석 가이드
 
 nb = {"cells":cells,"metadata":{"kernelspec":{"display_name":"Python 3","language":"python","name":"python3"},
       "language_info":{"name":"python"}},"nbformat":4,"nbformat_minor":5}
-outp = os.path.expanduser("~/geoit_sr_refiner/eval_big.ipynb")
+outp = os.path.expanduser("~/erang_sr/eval_big.ipynb")
 json.dump(nb, open(outp,"w",encoding="utf-8"), ensure_ascii=False, indent=1)
 print("WROTE", outp, "cells:", len(cells))

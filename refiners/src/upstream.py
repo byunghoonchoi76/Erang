@@ -56,7 +56,7 @@ def load_cyclegan(weight_path, device="cuda"):
 # --------------------------------------------------------------------------
 def load_hat(weight_path, device="cuda", upscale=4, embed_dim=180, window_size=16):
     """HAT 아키텍처는 basicsr 레지스트리에 의존 → 지연 import.
-    net_g_270000.pth는 EMA 가중치(params_ema)."""
+    HAT_WEIGHTS.pth는 EMA 가중치(params_ema)."""
     wp = _resolve(weight_path)
     if not wp or not os.path.exists(wp):
         print(f"[HAT] WARN weight missing -> None (임계경로, 기업 공유 대기): {wp}")

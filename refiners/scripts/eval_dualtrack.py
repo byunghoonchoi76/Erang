@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 import torch
 
-ROOT = os.path.expanduser("~/geoit_sr_refiner")
+ROOT = os.path.expanduser("~/erang_sr")
 CUT = os.path.join(ROOT, "refiners/cut_src")
 os.chdir(CUT)
 for p in (CUT, ROOT, os.path.join(ROOT, "team_aiduo")):

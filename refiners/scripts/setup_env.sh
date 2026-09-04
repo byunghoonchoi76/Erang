@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GeoIT SR Refiner 환경 구성 (MS-C931, GB10 Blackwell, CUDA 13)
+# Erang SR Refiner 환경 구성 (SERVER, GB10 Blackwell, CUDA 13)
 # 주의: basicsr==1.4.2는 구버전이라 CUDA13/Blackwell/py3.12에서 그대로 빌드되지 않을 수 있음.
 #       HAT 아키텍처만 쓰려면 full basicsr 없이 필요한 모듈만 vendor하는 우회도 가능.
 set -e

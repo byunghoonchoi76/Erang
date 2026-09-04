@@ -7,7 +7,7 @@ def code(s): cells.append({"cell_type":"code","execution_count":None,"metadata":
 
 md("""# CUT Refiner — 실데이터 학습 & 평가
 
-기업 실데이터(`goit_supperres_data`, LR/HR 10,200쌍)에서 **300쌍(512 해상도)** 를 뽑아
+기업 실데이터(`sr_data_full`, LR/HR 10,200쌍)에서 **300쌍(512 해상도)** 를 뽑아
 domain A=SR_Output(LR→RRDB) / domain B=HR 로 CUT을 학습하고,
 **기존 CycleGAN baseline(refined 평균 PSNR 17.23 / SSIM 0.534)** 과 비교한다.
 
@@ -18,7 +18,7 @@ domain A=SR_Output(LR→RRDB) / domain B=HR 로 CUT을 학습하고,
 
 md("## 0. 환경 설정")
 code("""import os, sys, time, glob
-ROOT = os.path.expanduser("~/geoit_sr_refiner")
+ROOT = os.path.expanduser("~/erang_sr")
 CUT  = os.path.join(ROOT, "refiners/cut_src")
 os.chdir(CUT); sys.path.insert(0, CUT) if CUT not in sys.path else None
 import torch, numpy as np
@@ -126,6 +126,6 @@ md("""## 다음
 
 nb = {"cells":cells,"metadata":{"kernelspec":{"display_name":"Python 3","language":"python","name":"python3"},
       "language_info":{"name":"python"}},"nbformat":4,"nbformat_minor":5}
-outp = os.path.expanduser("~/geoit_sr_refiner/cut_refiner_real.ipynb")
+outp = os.path.expanduser("~/erang_sr/cut_refiner_real.ipynb")
 json.dump(nb, open(outp,"w",encoding="utf-8"), ensure_ascii=False, indent=1)
 print("WROTE", outp, "cells:", len(cells))

@@ -2,8 +2,8 @@
 set -e
 source ~/miniforge3/etc/profile.d/conda.sh
 conda activate trellis
-cd ~/geoit_sr_refiner
-D=data/extracted/goit_supperres_data/train_data
+cd ~/erang_sr
+D=data/extracted/sr_data_full/train_data
 echo "[$(date +%H:%M:%S)] ===== 본학습 파이프라인 시작 ====="
 
 # 1) 데이터 확장 (refine_big 없으면)
